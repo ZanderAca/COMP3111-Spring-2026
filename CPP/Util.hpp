@@ -33,6 +33,8 @@ public:
     T* find(std::string _name) const;
     void insert(T* _data);
     T* remove(std::string _name);
+
+    void sort();
 };
 
 #include "Util.tpp"

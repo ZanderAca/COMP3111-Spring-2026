@@ -82,3 +82,25 @@ T* LinkedList<T>::remove(std::string _name){
     delete target_node;
     return target_data;
 }
+
+template<typename T>
+void LinkedList<T>::sort(){
+    int j = 0;
+    Node* cur_last_node = nullptr;
+    for(Node* cur_node = head_;cur_node!=nullptr;cur_last_node = cur_node, cur_node = cur_node->next_,j++){
+        if(!cur_last_node){continue;}
+
+        int i = 0;
+        Node* prev_last_node = nullptr;
+        Node* prev_node = head_;
+        for(;i<j;prev_last_node = prev_node, prev_node = prev_node->next_,i++){
+            if(cur_node->data_->getName()<prev_node->data_->getName()){break;}
+        }
+        
+        cur_last_node->next_ = cur_node->next_;
+        cur_node->next_ = prev_node;
+        if(!prev_last_node){head_ = cur_node;}else{prev_last_node->next_ = cur_node;}
+        cur_node = cur_last_node->next_;
+    }
+    return;
+}

@@ -12,13 +12,13 @@ class Author:public User{
 private:
     LinkedList<Book> published_books_;
 public:
-    Author();
+    Author(const std::string _name);
     ~Author() override;
 
-    void publishBook();
-    void forbiddenBook();
-    void viewBookStatistics();
-    void summarizeBook(); //LLM
+    bool publishBook(Book* _book);
+    bool forbidBook(Book* _book);
+    void viewBookStatistics(Book* _book);
+    void summarizeBook(Book* _book); //LLM
 };
 
 } //LibrarySystem

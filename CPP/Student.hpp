@@ -12,12 +12,12 @@ class Student:public User{
 private:
     LinkedList<Book> borrowed_books_;
 public:
-    Student();
+    Student(const std::string _name);
     ~Student() override;
 
-    void borrowBook();
-    void returnBook();
-    void requestBook();
+    bool borrowBook(Book* _book);
+    bool returnBook(Book* _book);
+    void requestBook(Book* _book);
 };
 
 } //LibrarySystem

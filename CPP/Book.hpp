@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Util.hpp"
+
+#include <iostream>
 #include <string>
 #include <stdint.h>
 
@@ -13,9 +16,9 @@ private:
     const std::string name_;
     Author* author_;
     
-    User* borrower_;
-    uint32_t stock_;
-    uint32_t borrow_count_;
+    LinkedList<User> borrowers_;
+    int32_t stock_;
+    int32_t borrow_count_;
     
     enum class State{
         NEW = 0,
@@ -24,9 +27,14 @@ private:
     } state_;
     
 public:
-    Book();
+    Book(const std::string _name, Author* _author, uint32_t _stock);
     ~Book();
 
+    bool bePubished(Author* _author);
+    bool beForbidden(Author* _author);
+    bool beBorrowed(User* _borrower);
+    bool beReturned(User* _borrower);
+    void printStatistics();
     std::string getName() const{return name_;}
 };
 
