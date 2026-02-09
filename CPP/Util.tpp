@@ -22,16 +22,21 @@ LinkedList<T>::~LinkedList(){
 
 template<typename T>
 LinkedList<T>& LinkedList<T>::operator=(const LinkedList<T>& _other){
+    if(&(_other)==this){return (*this);}
+
     Node* last_node = nullptr;
     for(Node* cur_node = head_;cur_node!=nullptr;){
         last_node = cur_node;
         cur_node = cur_node->next_;
         delete last_node;
     }
+    head_ = nullptr;
 
     for(Node* cur_node = _other.head_;cur_node!=nullptr;cur_node = cur_node->next_){
         this->insert(cur_node->data_);
     }
+
+    return (*this);
 }
 
 template<typename T>
@@ -77,7 +82,7 @@ T* LinkedList<T>::remove(std::string _name){
     if(!target_node){return nullptr;}
 
     T* target_data = target_node->data_;
-    last_node->next_ = target_node->next_;
+    if(!last_node){head_ = target_node->next_;}else{last_node->next_ = target_node->next_;}
     target_node->next_ = nullptr;
     delete target_node;
     return target_data;
@@ -85,22 +90,26 @@ T* LinkedList<T>::remove(std::string _name){
 
 template<typename T>
 void LinkedList<T>::sort(){
-    int j = 0;
-    Node* cur_last_node = nullptr;
-    for(Node* cur_node = head_;cur_node!=nullptr;cur_last_node = cur_node, cur_node = cur_node->next_,j++){
-        if(!cur_last_node){continue;}
-
-        int i = 0;
-        Node* prev_last_node = nullptr;
-        Node* prev_node = head_;
-        for(;i<j;prev_last_node = prev_node, prev_node = prev_node->next_,i++){
-            if(cur_node->data_->getName()<prev_node->data_->getName()){break;}
-        }
+    Node* sorted_head = nullptr;
+    Node* next_node = nullptr;
+    for(Node* cur_node = head_;cur_node!=nullptr;cur_node=next_node){
+        next_node = cur_node->next_;
         
-        cur_last_node->next_ = cur_node->next_;
-        cur_node->next_ = prev_node;
-        if(!prev_last_node){head_ = cur_node;}else{prev_last_node->next_ = cur_node;}
-        cur_node = cur_last_node->next_;
+        if(!sorted_head||(sorted_head->data_->getName()>=cur_node->data_->getName())){
+            cur_node->next_ = sorted_head;
+            sorted_head = cur_node;
+        }else{
+            Node* prev_node = sorted_head;
+            for(;prev_node->next_!=nullptr;prev_node=prev_node->next_){
+                if(prev_node->next_->data_->getName()>cur_node->data_->getName()){break;}
+            }
+            cur_node->next_ = prev_node->next_;
+            prev_node->next_ = cur_node;
+        }
+
+        cur_node = next_node;
     }
+
+    head_ = sorted_head;
     return;
 }
